@@ -140,6 +140,6 @@ MIT License: only for acdamic use.
 
 ---
 
-## 📧 Contact
+## Contact
 
 Xinyang Qian: qianxy@stu.xjtu.edu.cn
