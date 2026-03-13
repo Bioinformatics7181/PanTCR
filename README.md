@@ -177,7 +177,7 @@ python code/eval_alleles_without_CDR3.py --gt 'example/SC1.genotype.csv' --infer
 python code/eval_alleles_without_CDR3.py --gt 'example/SC1.genotype.csv' --infer 'results/infer_SC1.J.csv' --index 'ref/TRB_index.csv' --gene_type 'J' --out_prefix 'results/eval_SC1.J'
 ```
 
-where the --gt parameter denotes the label file, the --index parameter denotes the file recording the region index of the specific genes.
+where the --gt parameter denotes the label file and the --index parameter denotes the file recording the region index of the specific genes.
 
 ---
 
