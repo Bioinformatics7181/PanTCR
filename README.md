@@ -1,4 +1,4 @@
-# PanTCR: Robust Inference of Novel TCR Alleles from Fragmented RNA-seq Data via Pan-clonotype Graph Priors
+# PanTCR: Local Pan-clonotype Graphs Enable Robust Inference and Discovery of TCR Alleles from Fragmented Transcriptomes
 
 This repository contains the implementation and reproduction pipeline for **PanTCR**, a tool designed to infer novel TCR alleles from fragmented RNA-seq data using pan-clonotype graph priors.
 
