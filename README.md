@@ -135,15 +135,15 @@ where the --input parameter denotes the rearrangement file and the --ref paramet
 
 ```bash
 # For V genes
-python code/infer_genotype_bayes_v4.py 
-    --sample_csv 'results/SC1.V' 
-    --out 'results/infer_SC1.V.csv' 
+python code/infer_genotype_bayes_v4.py \
+    --sample_csv 'results/SC1.V_sequences.csv' \
+    --out 'results/infer_SC1.V.csv' \
     --pangenome_dir 'pang/V'
 
 # For J genes
-python code/infer_genotype_bayes_v4.py 
-    --sample_csv 'results/SC1.J' 
-    --out 'results/infer_SC1.J.csv' 
+python code/infer_genotype_bayes_v4.py \
+    --sample_csv 'results/SC1.J_sequences.csv' \
+    --out 'results/infer_SC1.J.csv' \
     --pangenome_dir 'pang/J'
 ```
 
@@ -171,10 +171,20 @@ python code/build_pangenome_graph_v7.py \
 
 ```bash
 # For V genes
-python code/eval_alleles_without_CDR3.py --gt 'example/SC1.genotype.csv' --infer 'results/infer_SC1.V.csv' --index 'ref/TRB_index.csv' --gene_type 'V' --out_prefix 'results/eval_SC1.V'
+python code/eval_alleles_without_CDR3.py \
+    --gt 'example/SC1.genotype.csv' \
+    --infer 'results/infer_SC1.V.csv' \
+    --index 'ref/TRB_index.csv' \
+    --gene_type 'V' \
+    --out_prefix 'results/eval_SC1.V'
 
 # For J genes
-python code/eval_alleles_without_CDR3.py --gt 'example/SC1.genotype.csv' --infer 'results/infer_SC1.J.csv' --index 'ref/TRB_index.csv' --gene_type 'J' --out_prefix 'results/eval_SC1.J'
+python code/eval_alleles_without_CDR3.py \
+    --gt 'example/SC1.genotype.csv' \
+    --infer 'results/infer_SC1.J.csv' \
+    --index 'ref/TRB_index.csv' \
+    --gene_type 'J' \
+    --out_prefix 'results/eval_SC1.J'
 ```
 
 where the --gt parameter denotes the label file and the --index parameter denotes the file recording the region index of the specific genes.
