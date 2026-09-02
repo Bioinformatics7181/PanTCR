@@ -106,6 +106,9 @@ def trim_sequence(seq: str, gene: str, gene_type: str, index_df: pd.DataFrame) -
             return seq[:cut] if cut > 0 else seq
         return seq
     if gene_type == "J":
+        if pd.notna(r.get("FR4Begin")) and pd.notna(r.get("FR4End")):
+            length = int(r["FR4End"]) - int(r["FR4Begin"])
+            return seq[-length:] if length > 0 and len(seq) > length else seq
         start = int(r["FR4Begin"]) if pd.notna(r.get("FR4Begin")) else 0
         return seq[start:] if len(seq) > start else seq
     return seq

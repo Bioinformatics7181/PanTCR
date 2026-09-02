@@ -28,7 +28,6 @@ from pathlib import Path
 import pandas as pd
 
 from common_pantcr_io import (
-    compatible_match_score,
     load_trb_index,
     prediction_records,
     truth_records,
@@ -165,30 +164,18 @@ def labels_for_records(records: list[dict]) -> dict[str, set[str]]:
     return dict(out)
 
 
-def legacy_compatible_sequence_matching(
+def exact_sequence_matching(
     truth_sequences: list[str],
     pred_sequences: list[str],
-    gene_type: str,
 ) -> tuple[set[int], set[int]]:
-    """Use the sequence evaluator's compatible-coverage accounting.
-
-    Each unique predicted sequence is TP if it is compatible with at least one
-    unique truth sequence. All compatible truth sequences are marked as covered
-    for recall/FN accounting. This keeps the consolidated evaluator aligned
-    with the label-sequence truth accounting used by the benchmark workflows.
-    """
     matched_pred_indices: set[int] = set()
     matched_truth_indices: set[int] = set()
-
+    truth_by_sequence = {seq: idx for idx, seq in enumerate(truth_sequences)}
     for pred_idx, pred_seq in enumerate(pred_sequences):
-        pred_matched = False
-        for truth_idx, truth_seq in enumerate(truth_sequences):
-            score = compatible_match_score(truth_seq, pred_seq, gene_type)
-            if score > 0:
-                pred_matched = True
-                matched_truth_indices.add(truth_idx)
-        if pred_matched:
+        truth_idx = truth_by_sequence.get(pred_seq)
+        if truth_idx is not None:
             matched_pred_indices.add(pred_idx)
+            matched_truth_indices.add(truth_idx)
 
     return matched_pred_indices, matched_truth_indices
 
@@ -197,8 +184,8 @@ def run_sequence_mode(args: argparse.Namespace) -> None:
     gt_path, infer_path = validate_sequence_args(args)
     index_df = load_trb_index(args.index)
 
-    # Truth comes from the label sequence, not a catalog lookup. The helper
-    # still applies the same TRB_index trimming.
+    # pmtr_map is intentionally empty: truth is the label sequence, not a
+    # catalog lookup. The helper still applies the same TRB_index trimming.
     truth_rows = truth_records(gt_path, args.gene_type, index_df, pmtr_map={}, prefer_label_sequence=True)
     pred_rows = prediction_records(infer_path, args.gene_type, index_df)
 
@@ -220,9 +207,7 @@ def run_sequence_mode(args: argparse.Namespace) -> None:
     tp_rows: list[dict[str, str]] = []
     fp_rows: list[dict[str, str]] = []
     fn_rows: list[dict[str, str]] = []
-    matched_pred_indices, matched_truth_indices = legacy_compatible_sequence_matching(
-        truth_sequences, pred_sequences, args.gene_type
-    )
+    matched_pred_indices, matched_truth_indices = exact_sequence_matching(truth_sequences, pred_sequences)
 
     for pred_idx, pred_seq in enumerate(pred_sequences):
         pred_genes = ",".join(sorted(predictions[pred_seq]))
